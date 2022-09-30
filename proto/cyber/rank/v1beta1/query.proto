@@ -12,106 +12,124 @@ option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 
 service Query {
-    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/rank/params";
-    }
 
-    rpc Rank(QueryRankRequest) returns (QueryRankResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/rank/rank/{particle}";
-    }
+  // Returns params of the rank module
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/rank/params";
+  }
 
-    rpc Search(QuerySearchRequest) returns (QuerySearchResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/rank/search/{particle}";
-    }
+  // Returns the rank of the current particle
+  rpc Rank(QueryRankRequest) returns (QueryRankResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/rank/rank/{particle}";
+  }
 
-    rpc Backlinks(QuerySearchRequest) returns (QuerySearchResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/rank/backlinks/{particle}";
-    }
+  // Returns list of particles which are cyberlinked with current particle
+  // sorted by rank
+  rpc Search(QuerySearchRequest) returns (QuerySearchResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/rank/search/{particle}";
+  }
 
-    rpc Top(cyber.base.query.v1beta1.PageRequest) returns (QuerySearchResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/rank/top";
-    }
+  // Returns the backlinks cyberlinked to the current particle
+  rpc Backlinks(QuerySearchRequest) returns (QuerySearchResponse) {
+    option (google.api.http).get =
+        "/cyber/rank/v1beta1/rank/backlinks/{particle}";
+  }
 
-    rpc IsLinkExist(QueryIsLinkExistRequest) returns (QueryLinkExistResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/is_link_exist";
-    }
+  // Returns the top cyberlinks in the knowledgegraph sorted by rank desc
+  rpc Top(cyber.base.query.v1beta1.PageRequest) returns (QuerySearchResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/rank/top";
+  }
 
-    rpc IsAnyLinkExist(QueryIsAnyLinkExistRequest) returns (QueryLinkExistResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/is_any_link_exist";
-    }
+  // Returns boolean value if cyberlink is created by the current neuron
+  rpc IsLinkExist(QueryIsLinkExistRequest) returns (QueryLinkExistResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/is_link_exist";
+  }
 
-    rpc ParticleNegentropy(QueryNegentropyPartilceRequest) returns (QueryNegentropyParticleResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/negentropy/{particle}";
-    }
+  // Returns boolean value if cyberlink is created by any neuron
+  rpc IsAnyLinkExist(QueryIsAnyLinkExistRequest)
+      returns (QueryLinkExistResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/is_any_link_exist";
+  }
 
-    rpc Negentropy(QueryNegentropyRequest) returns (QueryNegentropyResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/negentropy";
-    }
+  // Returns the particle negentropy (negative entropy)
+  rpc ParticleNegentropy(QueryNegentropyPartilceRequest)
+      returns (QueryNegentropyParticleResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/negentropy/{particle}";
+  }
 
-    rpc Karma(QueryKarmaRequest) returns (QueryKarmaResponse) {
-        option (google.api.http).get = "/cyber/rank/v1beta1/karma/{neuron}";
-    }
+  // Returns the knowledge graph negentropy (negative entropy) as a sum of particles negentropy
+  rpc Negentropy(QueryNegentropyRequest) returns (QueryNegentropyResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/negentropy";
+  }
+
+  // Returns neuron's karma value
+  rpc Karma(QueryKarmaRequest) returns (QueryKarmaResponse) {
+    option (google.api.http).get = "/cyber/rank/v1beta1/karma/{neuron}";
+  }
 }
 
 message QueryParamsRequest {}
 
-message QueryParamsResponse{
-    cyber.rank.v1beta1.Params params = 1 [(gogoproto.nullable) = false ];
+message QueryParamsResponse {
+  // Rank params respnse
+  cyber.rank.v1beta1.Params params = 1 [ (gogoproto.nullable) = false ];
 }
 
-message QueryRankRequest {
-    string particle = 1;
+message QueryRankRequest { 
+  // Knowledge graph particle or CID (starts with Qm..)
+  string particle = 1; 
 }
 
-message QueryRankResponse{
-    uint64 rank = 1;
+message QueryRankResponse { 
+  // Rank value
+  uint64 rank = 1; 
 }
 
 message QuerySearchRequest {
-    string particle                                 = 1;
-    cyber.base.query.v1beta1.PageRequest pagination = 2;
+  // Knowledge graph particle or CID (starts with Qm..)
+  string particle = 1;
+  cyber.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QuerySearchResponse {
-    repeated RankedParticle result                   = 1 [(gogoproto.nullable) = false];
-    cyber.base.query.v1beta1.PageResponse pagination = 2;
+  repeated RankedParticle result = 1 [ (gogoproto.nullable) = false ];
+  cyber.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryTopRequest {}
 
 message QueryIsLinkExistRequest {
-    string from    = 1;
-    string to      = 2;
-    string address = 3;
+  // Knowledge graph particle or CID (starts with Qm..) from
+  string from = 1;
+  // Knowledge graph particle or CID (starts with Qm..) to
+  string to = 2;
+  // Neuron address made cyberlink
+  string address = 3;
 }
 
 message QueryIsAnyLinkExistRequest {
-    string from = 1;
-    string to   = 2;
+  // Knowledge graph particle or CID (starts with Qm..) from
+  string from = 1;
+  // Knowledge graph particle or CID (starts with Qm..) to
+  string to = 2;
 }
 
-message QueryLinkExistResponse {
-    bool exist = 1;
+message QueryLinkExistResponse { bool exist = 1; }
+
+message QueryNegentropyPartilceRequest { 
+  // Knowledge graph particle or CID (starts with Qm..) from
+  string particle = 1; 
 }
 
-message QueryNegentropyPartilceRequest {
-    string particle = 1;
-}
-
-message QueryNegentropyParticleResponse {
-    uint64 entropy = 1;
-}
+message QueryNegentropyParticleResponse { uint64 entropy = 1; }
 
 message QueryNegentropyRequest {}
 
-message QueryNegentropyResponse {
-    uint64 negentropy = 1;
+message QueryNegentropyResponse { uint64 negentropy = 1; }
+
+message QueryKarmaRequest { 
+  // The neuron address
+  string neuron = 1; 
 }
 
-message QueryKarmaRequest {
-    string neuron = 1;
-}
-
-message QueryKarmaResponse {
-    uint64 karma = 1;
-}
+message QueryKarmaResponse { uint64 karma = 1; }
