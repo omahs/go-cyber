@@ -12,26 +12,33 @@ option (gogoproto.goproto_getters_all) = false;
 option (gogoproto.equal_all) = false;
 
 service Query {
-    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-        option (google.api.http).get = "/cyber/resources/v1beta1/resources/params";
-    }
-    rpc Investmint(QueryInvestmintRequest) returns (QueryInvestmintResponse) {
-        option (google.api.http).get = "/cyber/resources/v1beta1/resources/investmint";
-    }
+  // The resources module params
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/cyber/resources/v1beta1/resources/params";
+  }
+
+  // Returns calculated amount of resource tokens (ampere, volt) for the given params
+  rpc Investmint(QueryInvestmintRequest) returns (QueryInvestmintResponse) {
+    option (google.api.http).get =
+        "/cyber/resources/v1beta1/resources/investmint";
+  }
 }
 
 message QueryParamsRequest {}
 
-message QueryParamsResponse{
-    Params params = 1 [(gogoproto.nullable) = false];
+message QueryParamsResponse {
+  Params params = 1 [ (gogoproto.nullable) = false ];
 }
 
 message QueryInvestmintRequest {
-    cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
-    string resource                 = 2;
-    uint64 length                   = 3;
+  // Investmint hydrogen amount
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
+  // Desirable resource denom (milliampere, millivolt)
+  string resource = 2;
+  // Time period in s for locking hydrogen tokens
+  uint64 length = 3;
 }
 
 message QueryInvestmintResponse {
-    cosmos.base.v1beta1.Coin amount = 1 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin amount = 1 [ (gogoproto.nullable) = false ];
 }
