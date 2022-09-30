@@ -1498,6 +1498,7 @@ paths:
         - resources
   /cyber/dmn/v1beta1/dmn/params:
     get:
+      summary: Returns dmn(default mode network) param
       operationId: DmnParams
       responses:
         '200':
