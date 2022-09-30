@@ -7,13 +7,28 @@
   },
   "apis": [
     {
-      "url": "./tmp-swagger-gen/cyber/graph/v1beta1/query.swagger.json"
+      "url": "./tmp-swagger-gen/cyber/graph/v1beta1/query.swagger.json",
+      "tags": {
+        "rename": {
+          "Query": "graph"
+        }
+      }
     },
     {
-      "url": "./tmp-swagger-gen/cyber/graph/v1beta1/tx.swagger.json"
+      "url": "./tmp-swagger-gen/cyber/graph/v1beta1/tx.swagger.json",
+      "tags": {
+        "rename": {
+          "Service": "graph"
+        }
+      }
     },
     {
       "url": "./tmp-swagger-gen/cyber/rank/v1beta1/query.swagger.json",
+      "tags": {
+        "rename": {
+          "Query": "rank"
+        }
+      },
       "operationIds": {
         "rename": {
           "Params": "RankParams"
@@ -27,6 +42,11 @@
           "Params": "BandwidthParams",
           "Account": "Neuron"
         }
+      },
+      "tags": {
+        "rename": {
+          "Query": "bandwidth"
+        }
       }
     },
     {
@@ -34,6 +54,11 @@
       "operationIds": {
         "rename": {
           "Params": "GridParams"
+        }
+      },
+      "tags": {
+        "rename": {
+          "Query": "grid"
         }
       }
     },
@@ -46,10 +71,20 @@
         "rename": {
           "Params": "ResourcesParams"
         }
+      },
+      "tags": {
+        "rename": {
+          "Query": "resources"
+        }
       }
     },
     {
-      "url": "./tmp-swagger-gen/cyber/resources/v1beta1/tx.swagger.json"
+      "url": "./tmp-swagger-gen/cyber/resources/v1beta1/tx.swagger.json",
+      "tags": {
+        "rename": {
+          "Service": "resources"
+        }
+      }
     },
     {
       "url": "./tmp-swagger-gen/cyber/dmn/v1beta1/query.swagger.json",
@@ -57,10 +92,20 @@
         "rename": {
           "Params": "DmnParams"
         }
+      },
+      "tags": {
+        "rename": {
+          "Query": "dmn"
+        }
       }
     },
     {
-      "url": "./tmp-swagger-gen/cyber/dmn/v1beta1/tx.swagger.json"
+      "url": "./tmp-swagger-gen/cyber/dmn/v1beta1/tx.swagger.json",
+      "tags": {
+        "rename": {
+          "Service": "dmn"
+        }
+      }
     },
     {
       "url": "./client/docs/swagger_third_party.yaml",
