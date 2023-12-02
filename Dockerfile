@@ -40,21 +40,19 @@ RUN apt-get -y install --no-install-recommends \
     gnupg \
     git \
     software-properties-common \
-
 # Compile cyber for localnet genesis. Set git checkout to desired version of go-cyber
 ###########################################################################################
+&& mkdir -p /cyber/cosmovisor/genesis/bin \
 && git checkout wasm-size-override \
 && cd /sources \
 && make build CUDA_ENABLED=false \
 && cp ./build/cyber /cyber/cosmovisor/genesis/bin/ \
 && cp ./build/cyber /usr/local/bin \ 
 && rm -rf ./build \
-
 # Cleanup 
 ###########################################################################################
 && apt-get purge -y git \
     make \
-    cuda \
     gcc g++ \
     curl \
     gnupg \
@@ -76,8 +74,7 @@ RUN apt-get -y install --no-install-recommends \
 WORKDIR /
 COPY start_script.sh start_script.sh
 COPY entrypoint.sh /entrypoint.sh
-RUN wget -O /genesis.json https://gateway.ipfs.cybernode.ai/ipfs/QmYubyVNfghD4xCrTFj26zBwrF9s5GJhi1TmxvrwmJCipr \
-&& chmod +x start_script.sh \
+RUN chmod +x start_script.sh \
 && chmod +x /entrypoint.sh \
 && cyber version
 
