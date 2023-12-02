@@ -62,7 +62,7 @@ RUN apt-get -y install --no-install-recommends \
 && rm -rf ./build \
  # Compile cyber for genesis version
 ###########################################################################################
-&& git checkout v0.3.0 \
+&& git checkout wasm-size-override \
 && cd /sources/x/rank/cuda \
 && make build \
 && cd  /sources \
