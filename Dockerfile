@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends wget ca-certifi
 COPY . /sources
 WORKDIR /sources
 
-# Install CUDA, build tools and compile cyber
+# Install build tools and compile cyber without cpu
 ###########################################################################################
 RUN apt-get -y install --no-install-recommends \
     make gcc g++ \
@@ -40,35 +40,16 @@ RUN apt-get -y install --no-install-recommends \
     gnupg \
     git \
     software-properties-common \
-#    nvidia-cuda-toolkit \
-# Install cuda selected version instead nvidia-cuda-toolkit
-&& wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin \
-&& mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
-&& apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub \
-&& add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /" \
-&& apt-get update \
-&& apt-get install cuda=${CUDA_VER} -y --no-install-recommends \
-&& mkdir -p /cyber/cosmovisor/genesis/bin \
-&& mkdir -p /cyber/cosmovisor/upgrades/cyberfrey/bin \
-# Compile cyber for genesis version
+
+# Compile cyber for localnet genesis. Set git checkout to desired version of go-cyber
 ###########################################################################################
-&& git checkout v0.2.0 \
-&& cd /sources/x/rank/cuda \
-&& make build \
+&& git checkout wasm-size-override \
 && cd /sources \
-&& make build CUDA_ENABLED=true \
+&& make build CUDA_ENABLED=false \
 && cp ./build/cyber /cyber/cosmovisor/genesis/bin/ \
 && cp ./build/cyber /usr/local/bin \ 
 && rm -rf ./build \
- # Compile cyber for genesis version
-###########################################################################################
-&& git checkout v0.3.0 \
-&& cd /sources/x/rank/cuda \
-&& make build \
-&& cd  /sources \
-&& make build CUDA_ENABLED=true \
-&& cp ./build/cyber /cyber/cosmovisor/upgrades/cyberfrey/bin/ \
-&& rm -rf ./build \
+
 # Cleanup 
 ###########################################################################################
 && apt-get purge -y git \
@@ -79,7 +60,6 @@ RUN apt-get -y install --no-install-recommends \
     gnupg \
     python3.8 \
 && go clean --cache -i \
-&& apt-get remove --purge '^nvidia-.*' -y \
 && apt-get autoremove -y \
 && apt-get clean 
 
