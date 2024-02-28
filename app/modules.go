@@ -35,10 +35,12 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	"github.com/cosmos/ibc-go/v3/modules/apps/transfer"
-	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
-	ibc "github.com/cosmos/ibc-go/v3/modules/core"
-	ibchost "github.com/cosmos/ibc-go/v3/modules/core/24-host"
+	ibcfee "github.com/cosmos/ibc-go/v4/modules/apps/29-fee"
+	ibcfeetypes "github.com/cosmos/ibc-go/v4/modules/apps/29-fee/types"
+	"github.com/cosmos/ibc-go/v4/modules/apps/transfer"
+	ibctransfertypes "github.com/cosmos/ibc-go/v4/modules/apps/transfer/types"
+	ibc "github.com/cosmos/ibc-go/v4/modules/core"
+	ibchost "github.com/cosmos/ibc-go/v4/modules/core/24-host"
 	"github.com/gravity-devs/liquidity/x/liquidity"
 	liquiditytypes "github.com/gravity-devs/liquidity/x/liquidity/types"
 
@@ -96,6 +98,7 @@ var ModuleBasics = module.NewBasicManager(
 	feegrantmodule.AppModuleBasic{},
 	authzmodule.AppModuleBasic{},
 	ibc.AppModuleBasic{},
+	ibcfee.AppModuleBasic{},
 	upgrade.AppModuleBasic{},
 	evidence.AppModuleBasic{},
 	transfer.AppModuleBasic{},
@@ -141,6 +144,7 @@ func appModules(
 		sdkparams.NewAppModule(app.ParamsKeeper),
 		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.CyberbankKeeper.Proxy, app.interfaceRegistry),
 		transfer.NewAppModule(app.TransferKeeper),
+		ibcfee.NewAppModule(app.IBCFeeKeeper),
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.CyberbankKeeper.Proxy),
 		liquidity.NewAppModule(appCodec, app.LiquidityKeeper, app.AccountKeeper, app.CyberbankKeeper.Proxy, app.DistrKeeper),
 		cyberbank.NewAppModule(appCodec, app.CyberbankKeeper),
@@ -182,6 +186,7 @@ func simulationModules(
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		transfer.NewAppModule(app.TransferKeeper),
+		ibcfee.NewAppModule(app.IBCFeeKeeper),
 	}
 }
 
@@ -217,6 +222,7 @@ func orderBeginBlockers() []string {
 		ranktypes.ModuleName,
 		resourcestypes.ModuleName,
 		vestingtypes.ModuleName,
+		ibcfeetypes.ModuleName,
 		wasm.ModuleName,
 	}
 }
@@ -250,6 +256,7 @@ func orderEndBlockers() []string {
 		slashingtypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		ibcfeetypes.ModuleName,
 		wasm.ModuleName,
 	}
 }
@@ -275,6 +282,7 @@ func orderInitBlockers() []string {
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
 		vestingtypes.ModuleName,
+		ibcfeetypes.ModuleName,
 		wasm.ModuleName,
 		bandwidthtypes.ModuleName,
 		ranktypes.ModuleName,
