@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	v2 "github.com/cybercongress/go-cyber/v3/app/upgrades/v2"
 	"io"
 	"os"
 	"strings"
@@ -10,12 +11,10 @@ import (
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	"github.com/cosmos/cosmos-sdk/simapp"
 
-	"github.com/cybercongress/go-cyber/v3/app/keepers"
-	"github.com/cybercongress/go-cyber/v3/app/upgrades"
-	v2 "github.com/cybercongress/go-cyber/v3/app/upgrades/v2"
-
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	ibcclientclient "github.com/cosmos/ibc-go/v4/modules/core/02-client/client"
+	"github.com/cybercongress/go-cyber/v3/app/keepers"
+	"github.com/cybercongress/go-cyber/v3/app/upgrades"
 
 	ctypes "github.com/cybercongress/go-cyber/v3/types"
 
@@ -258,10 +257,10 @@ func NewApp(
 				AccountKeeper:   app.AccountKeeper,
 				BankKeeper:      app.CyberbankKeeper.Proxy,
 				FeegrantKeeper:  app.FeeGrantKeeper,
-				BandwidthMeter:  app.BandwidthMeter,
 				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
 				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 			},
+			BandwidthMeter:    app.BandwidthMeter,
 			IBCKeeper:         app.IBCKeeper,
 			TXCounterStoreKey: app.GetKey(wasm.StoreKey),
 			WasmConfig:        &wasmConfig,

@@ -79,7 +79,9 @@ func (k msgServer) Cyberlink(goCtx context.Context, msg *types.MsgCyberlink) (*t
 
 		if !accountBandwidth.HasEnoughRemained(cost) {
 			return nil, bandwidthtypes.ErrNotEnoughBandwidth
-		} else if (cost + currentBlockSpentBandwidth) > maxBlockBandwidth {
+		}
+		
+		if (cost + currentBlockSpentBandwidth) > maxBlockBandwidth {
 			return nil, bandwidthtypes.ErrExceededMaxBlockBandwidth
 		}
 
