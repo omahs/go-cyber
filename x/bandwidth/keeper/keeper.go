@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -17,7 +18,7 @@ type BandwidthMeter struct {
 	stakeProvider types.AccountStakeProvider
 	cdc           codec.BinaryCodec
 	storeKey      sdk.StoreKey
-	tkey          sdk.StoreKey
+	tkey          *storetypes.TransientStoreKey
 	paramSpace    paramstypes.Subspace
 
 	currentCreditPrice         sdk.Dec
@@ -28,7 +29,7 @@ type BandwidthMeter struct {
 func NewBandwidthMeter(
 	cdc codec.BinaryCodec,
 	key sdk.StoreKey,
-	tkey sdk.StoreKey,
+	tkey *storetypes.TransientStoreKey,
 	asp types.AccountStakeProvider,
 	paramSpace paramstypes.Subspace,
 ) *BandwidthMeter {
