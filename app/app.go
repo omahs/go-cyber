@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	v2 "github.com/cybercongress/go-cyber/v3/app/upgrades/v2"
+	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"io"
 	"os"
 	"strings"
@@ -97,6 +97,10 @@ func GetEnabledProposals() []wasm.ProposalType {
 	return proposals
 }
 
+func overrideWasmVariables() {
+	wasmtypes.MaxWasmSize = 2 * 1024 * 1024
+}
+
 // These constants are derived from the above variables.
 // These are the ones we will want to use in the code, based on
 // any overrides above
@@ -164,6 +168,7 @@ func NewApp(
 	wasmOpts []wasm.Option,
 	baseAppOptions ...func(*baseapp.BaseApp),
 ) *App {
+	overrideWasmVariables()
 	appCodec, legacyAmino := encodingConfig.Marshaler, encodingConfig.Amino
 	interfaceRegistry := encodingConfig.InterfaceRegistry
 
