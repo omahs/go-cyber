@@ -362,7 +362,7 @@ func NewAppKeepers(
 		appCodec,
 		appKeepers.keys[ibctransfertypes.StoreKey],
 		appKeepers.GetSubspace(ibctransfertypes.ModuleName),
-		appKeepers.IBCKeeper.ChannelKeeper,
+		appKeepers.IBCFeeKeeper, // ISC4 Wrapper: fee IBC middleware
 		appKeepers.IBCKeeper.ChannelKeeper,
 		&appKeepers.IBCKeeper.PortKeeper,
 		appKeepers.AccountKeeper,
@@ -409,7 +409,7 @@ func NewAppKeepers(
 		appKeepers.CyberbankKeeper.Proxy,
 		appKeepers.StakingKeeper,
 		appKeepers.DistrKeeper,
-		appKeepers.IBCFeeKeeper,
+		appKeepers.IBCFeeKeeper, // ISC4 Wrapper: fee IBC middleware
 		appKeepers.IBCKeeper.ChannelKeeper,
 		&appKeepers.IBCKeeper.PortKeeper,
 		scopedWasmKeeper,
