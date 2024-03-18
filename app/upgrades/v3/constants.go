@@ -6,7 +6,7 @@ import (
 	"github.com/cybercongress/go-cyber/v3/app/upgrades"
 )
 
-const UpgradeName = "reboot"
+const UpgradeName = "v3"
 
 var Upgrade = upgrades.Upgrade{
 	UpgradeName:          UpgradeName,
