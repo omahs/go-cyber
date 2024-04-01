@@ -3,9 +3,9 @@
 ###########################################################################################
 FROM ubuntu:20.04
 
-ENV GO_VERSION '1.17.8'
+ENV GO_VERSION '1.19.13'
 ENV GO_ARCH 'linux-amd64'
-ENV GO_BIN_SHA '980e65a863377e69fd9b67df9d8395fd8e93858e7a24c9f55803421e453f4f99'
+ENV GO_BIN_SHA '4643d4c29c55f53fa0349367d7f1bb5ca554ea6ef528c146825b0f8464e2e668'
 ENV DEBIAN_FRONTEND=noninteractive 
 ENV DAEMON_HOME /root/.cyber
 ENV DAEMON_RESTART_AFTER_UPGRADE=true
@@ -50,6 +50,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
 && apt-get install cuda=${CUDA_VER} -y --no-install-recommends \
 && mkdir -p /cyber/cosmovisor/genesis/bin \
 && mkdir -p /cyber/cosmovisor/upgrades/cyberfrey/bin \
+&& mkdir -p /cyber/cosmovisor/upgrades/v3/bin \
 # Compile cyber for genesis version
 ###########################################################################################
 && git checkout v0.2.0 \
@@ -58,16 +59,24 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
 && cd /sources \
 && make build CUDA_ENABLED=true \
 && cp ./build/cyber /cyber/cosmovisor/genesis/bin/ \
-&& cp ./build/cyber /usr/local/bin \ 
 && rm -rf ./build \
- # Compile cyber for genesis version
+ # Compile cyber for cyberfrey version
 ###########################################################################################
-&& git checkout v0.3.0 \
+&& git checkout v2.0.0 \
 && cd /sources/x/rank/cuda \
 && make build \
 && cd  /sources \
 && make build CUDA_ENABLED=true \
 && cp ./build/cyber /cyber/cosmovisor/upgrades/cyberfrey/bin/ \
+&& rm -rf ./build \
+ # Compile cyber for v3 version
+###########################################################################################
+&& git checkout v3.0.0 \
+&& cd /sources/x/rank/cuda \
+&& make build \
+&& cd  /sources \
+&& make build CUDA_ENABLED=true \
+&& cp ./build/cyber /cyber/cosmovisor/upgrades/v3/bin/ \
 && rm -rf ./build \
 # Cleanup 
 ###########################################################################################
@@ -98,9 +107,7 @@ COPY start_script.sh start_script.sh
 COPY entrypoint.sh /entrypoint.sh
 RUN wget -O /genesis.json https://gateway.ipfs.cybernode.ai/ipfs/QmYubyVNfghD4xCrTFj26zBwrF9s5GJhi1TmxvrwmJCipr \
 && chmod +x start_script.sh \
-&& chmod +x /entrypoint.sh \
-&& cyber version
-
+&& chmod +x /entrypoint.sh 
 
 #  Start
 ###############################################################################
